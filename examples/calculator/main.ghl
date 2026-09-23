@@ -1,0 +1,9 @@
+fn add(int a, int b) -> int {
+    return a + b;
+}
+
+fn main() -> int {
+    int result = add(10, 20);
+    print_int(result);
+    return 0;
+}

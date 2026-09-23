@@ -1,0 +1,4 @@
+name = "HelloWorld"
+version = "0.1.0"
+entry = "src/main.ghl"
+output = "bin/HelloWorld"
