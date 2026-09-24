@@ -17,6 +17,10 @@ static void emit_type(StringBuilder *sb, Type *t) {
             emit_type(sb, t->base);
             sb_append(sb, "*");
             break;
+        case TYPE_STRUCT:
+            if (t->name) sb_append(sb, t->name);
+            else sb_append(sb, "struct");
+            break;
         default: sb_append(sb, "void"); break;
     }
 }
@@ -151,6 +155,17 @@ static void emit_expr(StringBuilder *sb, Expr *e) {
             sb_append(sb, " = ");
             emit_expr(sb, e->assign.value);
             break;
+        case EXPR_MEMBER:
+            emit_expr(sb, e->member.object);
+            sb_append(sb, ".");
+            sb_append(sb, e->member.member);
+            break;
+        case EXPR_INDEX:
+            emit_expr(sb, e->index.array);
+            sb_append(sb, "[");
+            emit_expr(sb, e->index.index);
+            sb_append(sb, "]");
+            break;
         default:
             sb_append(sb, "0");
     }
@@ -215,6 +230,32 @@ static void emit_stmt(StringBuilder *sb, Stmt *s, int indent) {
             emit_indent(sb, indent);
             sb_append(sb, "}\n");
             break;
+        case STMT_FOR:
+            emit_indent(sb, indent);
+            sb_append(sb, "for (");
+            if (s->for_stmt.init) {
+                /* emit without indent/newline */
+                if (s->for_stmt.init->kind == STMT_VAR_DECL) {
+                    emit_type(sb, s->for_stmt.init->var_decl.type);
+                    sb_append(sb, " ");
+                    sb_append(sb, s->for_stmt.init->var_decl.name);
+                    if (s->for_stmt.init->var_decl.init) {
+                        sb_append(sb, " = ");
+                        emit_expr(sb, s->for_stmt.init->var_decl.init);
+                    }
+                } else if (s->for_stmt.init->kind == STMT_EXPR) {
+                    emit_expr(sb, s->for_stmt.init->expr);
+                }
+            }
+            sb_append(sb, "; ");
+            if (s->for_stmt.cond) emit_expr(sb, s->for_stmt.cond);
+            sb_append(sb, "; ");
+            if (s->for_stmt.step) emit_expr(sb, s->for_stmt.step);
+            sb_append(sb, ") {\n");
+            emit_stmt(sb, s->for_stmt.body, indent + 1);
+            emit_indent(sb, indent);
+            sb_append(sb, "}\n");
+            break;
         case STMT_BLOCK:
             for (int i = 0; i < s->block.count; i++)
                 emit_stmt(sb, s->block.stmts[i], indent);
@@ -265,7 +306,46 @@ char *codegen_to_c(Program *prog, DiagnosticEngine *diag) {
     sb_append(&sb, "#include <stdio.h>\n");
     sb_append(&sb, "#include <stdlib.h>\n");
     sb_append(&sb, "#include <string.h>\n");
-    sb_append(&sb, "#include <stdbool.h>\n\n");
+    sb_append(&sb, "#include <stdbool.h>\n");
+    sb_append(&sb, "#include <math.h>\n\n");
+
+
+    /* Struct definitions */
+    for (int i = 0; i < prog->struct_count; i++) {
+        StructDef *sd = prog->structs[i];
+        sb_append(&sb, "typedef struct ");
+        sb_append(&sb, sd->name);
+        sb_append(&sb, " {\n");
+        for (int j = 0; j < sd->field_count; j++) {
+            sb_append(&sb, "    ");
+            emit_type(&sb, sd->fields[j].type);
+            sb_append(&sb, " ");
+            sb_append(&sb, sd->fields[j].name);
+            sb_append(&sb, ";\n");
+        }
+        sb_append(&sb, "} ");
+        sb_append(&sb, sd->name);
+        sb_append(&sb, ";\n\n");
+    }
+
+    /* Function prototypes */
+    for (int i = 0; i < prog->func_count; i++) {
+        Function *f = prog->funcs[i];
+        emit_type(&sb, f->ret_type);
+        sb_append(&sb, " ");
+        if (strcmp(f->name, "main") == 0) sb_append(&sb, "main");
+        else sb_append(&sb, f->name);
+        sb_append(&sb, "(");
+        if (f->param_count == 0) sb_append(&sb, "void");
+        else {
+            for (int j = 0; j < f->param_count; j++) {
+                if (j) sb_append(&sb, ", ");
+                emit_type(&sb, f->params[j].type);
+            }
+        }
+        sb_append(&sb, ");\n");
+    }
+    sb_append(&sb, "\n");
 
     for (int i = 0; i < prog->func_count; i++) {
         emit_function(&sb, prog->funcs[i]);

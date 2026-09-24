@@ -23,7 +23,7 @@ fn main() -> int {
 - Explicit memory management (no GC by default)
 - No hidden magic that makes debugging harder
 
-## Current Status: Phase 1 (Bootstrap)
+## Current Status: Phase 1–2 (Bootstrap + Modules + Studio)
 
 | Component              | Status          |
 |------------------------|-----------------|
@@ -33,29 +33,47 @@ fn main() -> int {
 | Codegen (C backend)    | ✅ Implemented  |
 | `ghlc build` / `run`   | ✅ Working      |
 | Hello World            | ✅ Working      |
-| Project system         | 🚧 Basic        |
-| Full stdlib            | 🚧 Minimal      |
-| Pointers / Structs     | ⏳ Phase 2      |
-| Modules                | ⏳ Phase 2      |
-| GHL Studio IDE         | ⏳ Phase 4      |
-| Windows .exe native    | ⏳ Later (Linux ELF first) |
+| Linux native           | ✅ Working      |
+| Windows .exe native    | ✅ Supported (MSYS2 UCRT64) |
+| Project system         | ✅ Basic (`ghl.toml`) |
+| Full stdlib            | ✅ Core (io, math, string, memory, system) |
+| Pointers / Structs     | ✅ Basic        |
+| Modules                | ✅ Basic (`import`) |
+| GHL Studio IDE         | ✅ Web IDE (`ide/index.html`) |
 
-**Note:** Phase 1 targets Linux x86-64. Windows support (via MinGW/LLVM) is planned. The frontend is a real GHL lexer/parser/typechecker; the temporary C backend is only for bootstrapping native output.
+The frontend is a real GHL lexer/parser/typechecker. The temporary C backend is used only for bootstrapping native output (via system `gcc`).
 
-## Quick Start
+## Quick Start — MSYS2 UCRT64 (Windows)
+
+Open the **UCRT64** terminal, then:
 
 ```bash
-# Build the compiler
-cd compiler
-make
+# Install toolchain (once)
+pacman -S --needed mingw-w64-ucrt-x86_64-gcc mingw-w64-ucrt-x86_64-make make
 
-# Create a project
+# Build the compiler
+cd GaphopLang/compiler
+make
+# → ghlc.exe
+
+# Create & run a project
+./ghlc.exe new Hello
+cd Hello
+../ghlc.exe build
+./bin/Hello.exe
+```
+
+Full guide: [docs/installation-msys2.md](docs/installation-msys2.md)
+
+## Quick Start — Linux
+
+```bash
+cd GaphopLang/compiler
+make
 ./ghlc new Hello
 cd Hello
-
-# Build & run
-../compiler/ghlc build
-../compiler/ghlc run
+../ghlc build
+./bin/Hello
 ```
 
 ## Repository Layout
@@ -81,4 +99,4 @@ MIT License — see [LICENSE](LICENSE)
 
 GaphopLang 0.1.0  
 Compiler 0.1.0  
-Target: Linux x86-64 (Windows planned)
+Targets: Linux x86-64 · Windows x64 (MSYS2 UCRT64 / MinGW)

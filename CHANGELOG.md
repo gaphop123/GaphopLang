@@ -15,3 +15,8 @@
 ### Notes
 - Targets Linux x86-64 via gcc backend
 - Windows .exe and full IR/LLVM backend planned for later phases
+
+### Platform
+- Added MSYS2 UCRT64 / MinGW support
+- `ghlc.exe` and project outputs use `.exe` on Windows
+- Documentation: `docs/installation-msys2.md`

@@ -1,6 +1,6 @@
 CMakeFiles/GaphopLang.dir/compiler/src/common.c.obj: \
- C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\common.c \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/common.h \
+ C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\common.c \
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/common.h \
  C:/msys64/ucrt64/include/stdio.h \
  C:/msys64/ucrt64/include/corecrt_stdio_config.h \
  C:/msys64/ucrt64/include/corecrt.h C:/msys64/ucrt64/include/_mingw.h \

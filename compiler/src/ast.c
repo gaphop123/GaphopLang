@@ -193,6 +193,45 @@ Program *program_new(Arena *a) {
     Program *p = arena_alloc(a, sizeof(Program));
     p->funcs = NULL;
     p->func_count = 0;
+    p->structs = NULL;
+    p->struct_count = 0;
+    p->imports = NULL;
+    p->import_count = 0;
     p->arena = a;
     return p;
+}
+
+StructDef *struct_new(Arena *a, SourceLoc loc, char *name, StructField *fields, int n) {
+    StructDef *s = arena_alloc(a, sizeof(StructDef));
+    s->name = name;
+    s->fields = fields;
+    s->field_count = n;
+    s->loc = loc;
+    return s;
+}
+
+Expr *expr_member(Arena *a, SourceLoc loc, Expr *object, char *member) {
+    Expr *e = expr_new(a, EXPR_MEMBER, loc);
+    e->member.object = object;
+    e->member.member = member;
+    return e;
+}
+
+Expr *expr_index(Arena *a, SourceLoc loc, Expr *array, Expr *index) {
+    Expr *e = expr_new(a, EXPR_INDEX, loc);
+    e->index.array = array;
+    e->index.index = index;
+    return e;
+}
+
+Stmt *stmt_for(Arena *a, SourceLoc loc, Stmt *init, Expr *cond, Expr *step, Stmt *body) {
+    Stmt *s = arena_alloc(a, sizeof(Stmt));
+    memset(s, 0, sizeof(Stmt));
+    s->kind = STMT_FOR;
+    s->loc = loc;
+    s->for_stmt.init = init;
+    s->for_stmt.cond = cond;
+    s->for_stmt.step = step;
+    s->for_stmt.body = body;
+    return s;
 }

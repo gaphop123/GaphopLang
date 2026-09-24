@@ -5,9 +5,27 @@
 #include "ast.h"
 #include "typecheck.h"
 #include "codegen.h"
+
 #include <sys/stat.h>
-#include <unistd.h>
 #include <errno.h>
+
+#ifdef _WIN32
+#  include <direct.h>
+#  include <io.h>
+#  define mkdir(path, mode) _mkdir(path)
+#  define access _access
+#  define F_OK 0
+#  define R_OK 4
+#else
+#  include <unistd.h>
+#endif
+
+#if defined(_WIN32) || defined(__MINGW32__) || defined(__MINGW64__)
+#  define GHL_ON_WINDOWS 1
+#else
+#  define GHL_ON_WINDOWS 0
+#endif
+
 
 static char *read_file(const char *path, size_t *out_len) {
     FILE *f = fopen(path, "rb");
@@ -30,7 +48,45 @@ static int ensure_dir(const char *path) {
         if (S_ISDIR(st.st_mode)) return 0;
         return -1;
     }
-    return mkdir(path);
+    return mkdir(path, 0755);
+}
+
+
+static void merge_program(Program *dst, Program *src) {
+    if (src->func_count > 0) {
+        Function **nf = arena_alloc(dst->arena, sizeof(Function *) * (dst->func_count + src->func_count));
+        for (int i = 0; i < dst->func_count; i++) nf[i] = dst->funcs[i];
+        for (int i = 0; i < src->func_count; i++) nf[dst->func_count + i] = src->funcs[i];
+        dst->funcs = nf;
+        dst->func_count += src->func_count;
+    }
+    if (src->struct_count > 0) {
+        StructDef **ns = arena_alloc(dst->arena, sizeof(StructDef *) * (dst->struct_count + src->struct_count));
+        for (int i = 0; i < dst->struct_count; i++) ns[i] = dst->structs[i];
+        for (int i = 0; i < src->struct_count; i++) ns[dst->struct_count + i] = src->structs[i];
+        dst->structs = ns;
+        dst->struct_count += src->struct_count;
+    }
+}
+
+static int resolve_module_path(const char *imp, char *out, size_t outsz) {
+    if (!imp || !imp[0]) return -1;
+    if (imp[0] == '.' || strchr(imp, '/') || strstr(imp, ".ghl")) {
+        snprintf(out, outsz, "%s", imp);
+        return access(out, R_OK) == 0 ? 0 : -1;
+    }
+    snprintf(out, outsz, "std/%s.ghl", imp);
+    if (access(out, R_OK) == 0) return 0;
+    const char *stdroot = getenv("GHL_STD");
+    if (stdroot) {
+        snprintf(out, outsz, "%s/%s.ghl", stdroot, imp);
+        if (access(out, R_OK) == 0) return 0;
+    }
+    /* try alongside executable ../../std */
+    snprintf(out, outsz, "../std/%s.ghl", imp);
+    if (access(out, R_OK) == 0) return 0;
+    snprintf(out, outsz, "std/%s.ghl", imp);
+    return -1;
 }
 
 static int compile_file(const char *src_path, const char *out_exe, bool run_after, bool check_only) {
@@ -58,6 +114,41 @@ static int compile_file(const char *src_path, const char *out_exe, bool run_afte
     Parser parser;
     parser_init(&parser, &lex, &diag, arena);
     Program *prog = parse_program(&parser);
+
+    if (diag_has_errors(&diag)) {
+        diag_print_all(&diag, stderr);
+        printf("\nBuild failed with %d error(s).\n", diag.error_count);
+        arena_destroy(arena);
+        free(src);
+        diag_free(&diag);
+        return 1;
+    }
+
+    /* Resolve imports (one level, no cycles for Phase 2) */
+    for (int ii = 0; ii < prog->import_count; ii++) {
+        char modpath[1024];
+        ImportDecl *imp = prog->imports[ii];
+        if (resolve_module_path(imp->path, modpath, sizeof(modpath)) != 0) {
+            diag_error(&diag, imp->loc, "GHL001", "module not found: %s", imp->path);
+            diag_help(&diag, "looked for std/%s.ghl — set GHL_STD or use a relative path", imp->path);
+            continue;
+        }
+        printf("      import %s -> %s\n", imp->path, modpath);
+        size_t mlen = 0;
+        char *msrc = read_file(modpath, &mlen);
+        if (!msrc) {
+            diag_error(&diag, imp->loc, "GHL001", "cannot read module %s", modpath);
+            continue;
+        }
+        Lexer mlex;
+        lexer_init(&mlex, msrc, mlen, modpath, &diag, arena);
+        Parser mparser;
+        parser_init(&mparser, &mlex, &diag, arena);
+        Program *mprog = parse_program(&mparser);
+        if (mprog) merge_program(prog, mprog);
+        /* keep msrc alive for lexemes (arena lifetime ends at end of compile) */
+        (void)msrc;
+    }
 
     if (diag_has_errors(&diag)) {
         diag_print_all(&diag, stderr);
@@ -116,8 +207,14 @@ static int compile_file(const char *src_path, const char *out_exe, bool run_afte
 
     printf("[5/5] Linking\n");
     char cmd[1024];
-    const char *exe = out_exe ? out_exe : "build/a.out";
-    snprintf(cmd, sizeof(cmd), "gcc -O2 -o \"%s\" \"%s\" 2>&1", exe, c_path);
+    char default_out[512];
+#if GHL_ON_WINDOWS
+    snprintf(default_out, sizeof(default_out), "build/a.exe");
+#else
+    snprintf(default_out, sizeof(default_out), "build/a.out");
+#endif
+    const char *exe = out_exe ? out_exe : default_out;
+    snprintf(cmd, sizeof(cmd), "gcc -O2 -o \"%s\" \"%s\" -lm 2>&1", exe, c_path);
     int rc = system(cmd);
     if (rc != 0) {
         fprintf(stderr, "linker/compiler backend failed\n");
@@ -142,11 +239,20 @@ static int compile_file(const char *src_path, const char *out_exe, bool run_afte
     return 0;
 }
 
+static const char *basename_of(const char *path) {
+    const char *s = path;
+    for (const char *p = path; *p; p++) {
+        if (*p == '/' || *p == '\\') s = p + 1;
+    }
+    return s;
+}
+
 static int cmd_new(const char *name) {
     if (ensure_dir(name) != 0) {
         fprintf(stderr, "error: cannot create project directory '%s'\n", name);
         return 1;
     }
+    const char *base = basename_of(name);
     char path[512];
     snprintf(path, sizeof(path), "%s/src", name);
     ensure_dir(path);
@@ -162,10 +268,14 @@ static int cmd_new(const char *name) {
     snprintf(path, sizeof(path), "%s/ghl.toml", name);
     FILE *f = fopen(path, "w");
     if (f) {
-        fprintf(f, "name = \"%s\"\n", name);
+        fprintf(f, "name = \"%s\"\n", base);
         fprintf(f, "version = \"0.1.0\"\n");
         fprintf(f, "entry = \"src/main.ghl\"\n");
-        fprintf(f, "output = \"bin/%s\"\n", name);
+        #if GHL_ON_WINDOWS
+        fprintf(f, "output = \"bin/%s.exe\"\n", base);
+#else
+        fprintf(f, "output = \"bin/%s\"\n", base);
+#endif
         fclose(f);
     }
 
@@ -191,6 +301,35 @@ static int cmd_new(const char *name) {
     return 0;
 }
 
+
+/* Very small TOML reader for ghl.toml: name / entry / output */
+typedef struct {
+    char name[256];
+    char entry[512];
+    char output[512];
+} ProjectConfig;
+
+static int load_ghl_toml(const char *path, ProjectConfig *cfg) {
+    cfg->name[0] = cfg->entry[0] = cfg->output[0] = '\0';
+    FILE *f = fopen(path, "r");
+    if (!f) return 0;
+    char line[1024];
+    while (fgets(line, sizeof(line), f)) {
+        char *p = line;
+        while (*p == ' ' || *p == '\t') p++;
+        if (*p == '#' || *p == '\n' || *p == '\0') continue;
+        char key[64], val[512];
+        if (sscanf(p, "%63[^= \t] = \"%511[^\"]\"", key, val) == 2 ||
+            sscanf(p, "%63[^= \t]=\"%511[^\"]\"", key, val) == 2) {
+            if (strcmp(key, "name") == 0) snprintf(cfg->name, sizeof(cfg->name), "%s", val);
+            else if (strcmp(key, "entry") == 0) snprintf(cfg->entry, sizeof(cfg->entry), "%s", val);
+            else if (strcmp(key, "output") == 0) snprintf(cfg->output, sizeof(cfg->output), "%s", val);
+        }
+    }
+    fclose(f);
+    return 1;
+}
+
 static void print_help(void) {
     printf("GaphopLang Compiler %s\n\n", GHL_VERSION);
     printf("Usage:\n");
@@ -212,7 +351,11 @@ static void print_help(void) {
 static void print_version(void) {
     printf("GaphopLang Compiler %s\n", GHL_VERSION);
     printf("GHL Language %s\n", GHL_LANG_VERSION);
+#if GHL_ON_WINDOWS
+    printf("Target: Windows x64 (MSYS2 / MinGW UCRT64)\n");
+#else
     printf("Target: Linux x86-64\n");
+#endif
     printf("Backend: C (gcc)\n");
 }
 
@@ -265,26 +408,47 @@ int main(int argc, char **argv) {
         }
     }
 
+    static char src_buf[512], out_buf[512];
     if (!src) {
-        /* look for ghl.toml / src/main.ghl */
-        if (access("src/main.ghl", R_OK) == 0) {
-            src = "src/main.ghl";
-            if (!out) {
-                /* try read name from ghl.toml - simplified */
-                out = "bin/app";
+        ProjectConfig cfg;
+        if (load_ghl_toml("ghl.toml", &cfg)) {
+            if (cfg.entry[0]) {
+                snprintf(src_buf, sizeof(src_buf), "%s", cfg.entry);
+                src = src_buf;
+            }
+            if (!out && cfg.output[0]) {
+                snprintf(out_buf, sizeof(out_buf), "%s", cfg.output);
+                out = out_buf;
+                /* ensure parent dir */
                 ensure_dir("bin");
             }
-        } else if (access("main.ghl", R_OK) == 0) {
+        }
+        if (!src && access("src/main.ghl", R_OK) == 0) {
+            src = "src/main.ghl";
+        }
+        if (!src && access("main.ghl", R_OK) == 0) {
             src = "main.ghl";
-            if (!out) out = "build/main";
-        } else {
-            fprintf(stderr, "error: no source file specified and no src/main.ghl found\n");
+        }
+        if (!src) {
+            fprintf(stderr, "error: no source file specified and no ghl.toml / src/main.ghl found\n");
             return 1;
+        }
+        if (!out) {
+#if GHL_ON_WINDOWS
+            out = "bin/app.exe";
+#else
+            out = "bin/app";
+#endif
+            ensure_dir("bin");
         }
     }
 
     if (!out && !do_check) {
+        #if GHL_ON_WINDOWS
+        out = "build/a.exe";
+#else
         out = "build/a.out";
+#endif
         ensure_dir("build");
     }
 

@@ -1,0 +1,8 @@
+import "./utils.ghl";
+
+fn main() -> int {
+    int v = times2(21);
+    print_int(v);
+    println("");
+    return 0;
+}

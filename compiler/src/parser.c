@@ -41,28 +41,33 @@ static void synchronize(Parser *p) {
 
 static Type *parse_type(Parser *p) {
     Token t = p->current;
-    TypeKind kind = TYPE_UNKNOWN;
+    Type *ty = NULL;
     switch (t.kind) {
-        case TOK_VOID: kind = TYPE_VOID; break;
-        case TOK_INT: kind = TYPE_INT; break;
-        case TOK_UINT: kind = TYPE_UINT; break;
-        case TOK_SHORT: kind = TYPE_SHORT; break;
-        case TOK_USHORT: kind = TYPE_USHORT; break;
-        case TOK_LONG: kind = TYPE_LONG; break;
-        case TOK_ULONG: kind = TYPE_ULONG; break;
-        case TOK_FLOAT: kind = TYPE_FLOAT; break;
-        case TOK_DOUBLE: kind = TYPE_DOUBLE; break;
-        case TOK_CHAR_KW: kind = TYPE_CHAR; break;
-        case TOK_BOOL: kind = TYPE_BOOL; break;
-        case TOK_STRING_KW: kind = TYPE_STRING; break;
-        case TOK_BYTE: kind = TYPE_BYTE; break;
+        case TOK_VOID: advance(p); ty = type_new(p->arena, TYPE_VOID); break;
+        case TOK_INT: advance(p); ty = type_new(p->arena, TYPE_INT); break;
+        case TOK_UINT: advance(p); ty = type_new(p->arena, TYPE_UINT); break;
+        case TOK_SHORT: advance(p); ty = type_new(p->arena, TYPE_SHORT); break;
+        case TOK_USHORT: advance(p); ty = type_new(p->arena, TYPE_USHORT); break;
+        case TOK_LONG: advance(p); ty = type_new(p->arena, TYPE_LONG); break;
+        case TOK_ULONG: advance(p); ty = type_new(p->arena, TYPE_ULONG); break;
+        case TOK_FLOAT: advance(p); ty = type_new(p->arena, TYPE_FLOAT); break;
+        case TOK_DOUBLE: advance(p); ty = type_new(p->arena, TYPE_DOUBLE); break;
+        case TOK_CHAR_KW: advance(p); ty = type_new(p->arena, TYPE_CHAR); break;
+        case TOK_BOOL: advance(p); ty = type_new(p->arena, TYPE_BOOL); break;
+        case TOK_STRING_KW: advance(p); ty = type_new(p->arena, TYPE_STRING); break;
+        case TOK_BYTE: advance(p); ty = type_new(p->arena, TYPE_BYTE); break;
+        case TOK_IDENT: {
+            /* named type (struct) */
+            advance(p);
+            ty = type_new(p->arena, TYPE_STRUCT);
+            ty->name = (char *)t.lexeme;
+            break;
+        }
         default:
             diag_error(p->diag, t.loc, "GHL102", "expected type name");
             p->had_error = true;
             return type_new(p->arena, TYPE_ERROR);
     }
-    advance(p);
-    Type *ty = type_new(p->arena, kind);
     /* pointer: type* */
     while (match(p, TOK_STAR)) {
         ty = type_ptr(p->arena, ty);
@@ -74,6 +79,7 @@ static Type *parse_type(Parser *p) {
 static Expr *parse_expr(Parser *p);
 static Stmt *parse_stmt(Parser *p);
 static Stmt *parse_block(Parser *p);
+static Stmt *parse_var_decl(Parser *p, bool is_const);
 
 static Expr *parse_primary(Parser *p) {
     Token t = p->current;
@@ -127,6 +133,18 @@ static Expr *parse_postfix(Parser *p) {
             }
             expect(p, TOK_RPAREN, "')'");
             e = expr_call(p->arena, e->loc, e, args, count);
+        } else if (match(p, TOK_DOT)) {
+            Token m = expect(p, TOK_IDENT, "member name");
+            e = expr_member(p->arena, e->loc, e, (char *)m.lexeme);
+        } else if (match(p, TOK_ARROW)) {
+            Token m = expect(p, TOK_IDENT, "member name");
+            /* a->b  <=>  (*a).b */
+            Expr *deref = expr_unary(p->arena, e->loc, UN_DEREF, e);
+            e = expr_member(p->arena, e->loc, deref, (char *)m.lexeme);
+        } else if (match(p, TOK_LBRACKET)) {
+            Expr *idx = parse_expr(p);
+            expect(p, TOK_RBRACKET, "']'");
+            e = expr_index(p->arena, e->loc, e, idx);
         } else if (match(p, TOK_INC)) {
             e = expr_unary(p->arena, e->loc, UN_POST_INC, e);
         } else if (match(p, TOK_DEC)) {
@@ -317,10 +335,102 @@ static Stmt *parse_block(Parser *p) {
     return stmt_block(p->arena, loc, stmts, count);
 }
 
+
+static Stmt *parse_for(Parser *p) {
+    SourceLoc loc = p->current.loc;
+    expect(p, TOK_LPAREN, "'('");
+    Stmt *init = NULL;
+    if (!check(p, TOK_SEMI)) {
+        /* var decl or expr */
+        if (p->current.kind == TOK_INT || p->current.kind == TOK_UINT ||
+            p->current.kind == TOK_FLOAT || p->current.kind == TOK_DOUBLE ||
+            p->current.kind == TOK_BOOL || p->current.kind == TOK_STRING_KW ||
+            p->current.kind == TOK_CHAR_KW || p->current.kind == TOK_BYTE ||
+            p->current.kind == TOK_SHORT || p->current.kind == TOK_LONG ||
+            p->current.kind == TOK_IDENT) {
+            /* could be type or ident - try type first via var decl path without requiring only keywords */
+            Token peek = p->current;
+            /* simple: if next is ident after type-like, treat as decl */
+            init = parse_var_decl(p, false);
+            /* parse_var_decl already consumed ';' — for-loop needs no extra */
+            /* but parse_var_decl expects trailing ; which for has as separator - OK */
+        } else {
+            Expr *e = parse_expr(p);
+            expect(p, TOK_SEMI, "';'");
+            init = stmt_expr(p->arena, e->loc, e);
+        }
+    } else {
+        expect(p, TOK_SEMI, "';'");
+    }
+    Expr *cond = NULL;
+    if (!check(p, TOK_SEMI)) {
+        cond = parse_expr(p);
+    }
+    expect(p, TOK_SEMI, "';'");
+    Expr *step = NULL;
+    if (!check(p, TOK_RPAREN)) {
+        step = parse_expr(p);
+    }
+    expect(p, TOK_RPAREN, "')'");
+    Stmt *body = parse_stmt(p);
+    return stmt_for(p->arena, loc, init, cond, step, body);
+}
+
+
+static ImportDecl *parse_import(Parser *p) {
+    SourceLoc loc = p->current.loc;
+    expect(p, TOK_IMPORT, "'import'");
+    char *path = NULL;
+    if (check(p, TOK_STRING)) {
+        path = p->current.str_val;
+        advance(p);
+    } else if (check(p, TOK_IDENT)) {
+        path = (char *)p->current.lexeme;
+        advance(p);
+    } else {
+        diag_error(p->diag, p->current.loc, "GHL001", "expected module path after import");
+        p->had_error = true;
+        path = arena_strdup(p->arena, "");
+    }
+    expect(p, TOK_SEMI, "';'");
+    ImportDecl *imp = arena_alloc(p->arena, sizeof(ImportDecl));
+    imp->path = path;
+    imp->loc = loc;
+    return imp;
+}
+
+static StructDef *parse_struct(Parser *p) {
+    SourceLoc loc = p->current.loc;
+    expect(p, TOK_STRUCT, "'struct'");
+    Token name = expect(p, TOK_IDENT, "struct name");
+    expect(p, TOK_LBRACE, "'{'");
+    StructField *fields = NULL;
+    int count = 0, cap = 0;
+    while (!check(p, TOK_RBRACE) && !check(p, TOK_EOF)) {
+        if (count >= cap) {
+            cap = cap ? cap * 2 : 4;
+            StructField *nf = arena_alloc(p->arena, sizeof(StructField) * cap);
+            if (fields) memcpy(nf, fields, sizeof(StructField) * count);
+            fields = nf;
+        }
+        Type *ty = parse_type(p);
+        Token fn = expect(p, TOK_IDENT, "field name");
+        expect(p, TOK_SEMI, "';'");
+        fields[count].type = ty;
+        fields[count].name = (char *)fn.lexeme;
+        fields[count].loc = fn.loc;
+        count++;
+    }
+    expect(p, TOK_RBRACE, "'}'");
+    expect(p, TOK_SEMI, "';'");
+    return struct_new(p->arena, loc, (char *)name.lexeme, fields, count);
+}
+
 static Stmt *parse_stmt(Parser *p) {
     if (check(p, TOK_LBRACE)) return parse_block(p);
     if (match(p, TOK_IF)) return parse_if(p);
     if (match(p, TOK_WHILE)) return parse_while(p);
+    if (match(p, TOK_FOR)) return parse_for(p);
     if (match(p, TOK_RETURN)) return parse_return(p);
     if (match(p, TOK_BREAK)) {
         SourceLoc loc = p->current.loc;
@@ -339,8 +449,23 @@ static Stmt *parse_stmt(Parser *p) {
         p->current.kind == TOK_BOOL || p->current.kind == TOK_STRING_KW ||
         p->current.kind == TOK_CHAR_KW || p->current.kind == TOK_BYTE ||
         p->current.kind == TOK_SHORT || p->current.kind == TOK_LONG ||
-        p->current.kind == TOK_USHORT || p->current.kind == TOK_ULONG) {
-        return parse_var_decl(p, false);
+        p->current.kind == TOK_USHORT || p->current.kind == TOK_ULONG ||
+        p->current.kind == TOK_IDENT) {
+        /* Heuristic: Ident followed by Ident => type name (struct) */
+        if (p->current.kind == TOK_IDENT) {
+            Token saved = p->current;
+            /* peek next via lexer - use match carefully */
+            /* For Phase 2: if IDENT IDENT or IDENT *  treat as decl */
+            /* Simple approach: try looking at lookahead */
+            Token la = lexer_peek(p->lex);
+            if (la.kind != TOK_IDENT && la.kind != TOK_STAR) {
+                /* not a decl, fall through to expr */
+            } else {
+                return parse_var_decl(p, false);
+            }
+        } else {
+            return parse_var_decl(p, false);
+        }
     }
     /* expression statement */
     Expr *e = parse_expr(p);
@@ -390,6 +515,8 @@ void parser_init(Parser *p, Lexer *lex, DiagnosticEngine *diag, Arena *arena) {
 Program *parse_program(Parser *p) {
     Program *prog = program_new(p->arena);
     int cap = 0;
+    int scap = 0;
+    int icap = 0;
     while (!check(p, TOK_EOF)) {
         if (check(p, TOK_FN)) {
             if (prog->func_count >= cap) {
@@ -399,8 +526,24 @@ Program *parse_program(Parser *p) {
                 prog->funcs = nf;
             }
             prog->funcs[prog->func_count++] = parse_function(p);
+        } else if (check(p, TOK_STRUCT)) {
+            if (prog->struct_count >= scap) {
+                scap = scap ? scap * 2 : 4;
+                StructDef **ns = arena_alloc(p->arena, sizeof(StructDef *) * scap);
+                if (prog->structs) memcpy(ns, prog->structs, sizeof(StructDef *) * prog->struct_count);
+                prog->structs = ns;
+            }
+            prog->structs[prog->struct_count++] = parse_struct(p);
+        } else if (check(p, TOK_IMPORT)) {
+            if (prog->import_count >= icap) {
+                icap = icap ? icap * 2 : 4;
+                ImportDecl **ni = arena_alloc(p->arena, sizeof(ImportDecl *) * icap);
+                if (prog->imports) memcpy(ni, prog->imports, sizeof(ImportDecl *) * prog->import_count);
+                prog->imports = ni;
+            }
+            prog->imports[prog->import_count++] = parse_import(p);
         } else {
-            diag_error(p->diag, p->current.loc, "GHL104", "expected function declaration");
+            diag_error(p->diag, p->current.loc, "GHL104", "expected function, struct, or import");
             p->had_error = true;
             synchronize(p);
         }

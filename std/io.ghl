@@ -1,0 +1,8 @@
+// GHL Standard Library — io
+// Built-in runtime (always available, no import required for these):
+//   print(string)
+//   println(string)
+//   print_int(int)
+//   print_float(float)
+//
+// import io;  // reserved for future file/console APIs

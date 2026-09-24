@@ -1,0 +1,5 @@
+// GHL Standard Library — memory
+// Runtime: alloc / free map to malloc / free in the C backend.
+// Example (when pointers are fully wired in user code):
+//   int* p = alloc(...);
+//   free(p);

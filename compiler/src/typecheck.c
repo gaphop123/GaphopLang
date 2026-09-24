@@ -18,8 +18,9 @@ typedef struct {
     Arena *arena;
     Scope *scope;
     Function *current_func;
-    /* builtin functions */
     Symbol *builtins;
+    StructDef **structs;
+    int struct_count;
 } TypeChecker;
 
 static Type *type_int(TypeChecker *tc) { return type_new(tc->arena, TYPE_INT); }
@@ -27,6 +28,33 @@ static Type *type_bool(TypeChecker *tc) { return type_new(tc->arena, TYPE_BOOL);
 static Type *type_string(TypeChecker *tc) { return type_new(tc->arena, TYPE_STRING); }
 static Type *type_void(TypeChecker *tc) { return type_new(tc->arena, TYPE_VOID); }
 static Type *type_error(TypeChecker *tc) { return type_new(tc->arena, TYPE_ERROR); }
+
+static StructDef *find_struct(TypeChecker *tc, const char *name) {
+    for (int i = 0; i < tc->struct_count; i++) {
+        if (strcmp(tc->structs[i]->name, name) == 0)
+            return tc->structs[i];
+    }
+    return NULL;
+}
+
+static Type *struct_field_type(TypeChecker *tc, Type *sty, const char *field, SourceLoc loc) {
+    if (!sty || sty->kind != TYPE_STRUCT || !sty->name) {
+        diag_error(tc->diag, loc, "GHL210", "member access on non-struct type");
+        return type_error(tc);
+    }
+    StructDef *sd = find_struct(tc, sty->name);
+    if (!sd) {
+        diag_error(tc->diag, loc, "GHL211", "unknown struct type '%s'", sty->name);
+        return type_error(tc);
+    }
+    for (int i = 0; i < sd->field_count; i++) {
+        if (strcmp(sd->fields[i].name, field) == 0)
+            return sd->fields[i].type;
+    }
+    diag_error(tc->diag, loc, "GHL212", "struct '%s' has no field '%s'", sty->name, field);
+    return type_error(tc);
+}
+
 
 static bool type_eq(Type *a, Type *b) {
     if (!a || !b) return false;
@@ -186,6 +214,17 @@ static Type *check_expr(TypeChecker *tc, Expr *e) {
                 e->type = type_void(tc);
                 return e->type;
             }
+            if (strcmp(name, "sqrt") == 0 || strcmp(name, "sin") == 0 ||
+                strcmp(name, "cos") == 0 || strcmp(name, "tan") == 0 ||
+                strcmp(name, "pow") == 0 || strcmp(name, "floor") == 0 ||
+                strcmp(name, "ceil") == 0 || strcmp(name, "fabs") == 0) {
+                e->type = type_new(tc->arena, TYPE_FLOAT);
+                return e->type;
+            }
+            if (strcmp(name, "strlen") == 0) {
+                e->type = type_int(tc);
+                return e->type;
+            }
             /* user functions - look in program later; for now assume int */
             Symbol *s = lookup(tc, name);
             if (s) {
@@ -210,6 +249,24 @@ static Type *check_expr(TypeChecker *tc, Expr *e) {
                            type_to_str(vt), type_to_str(tt));
             }
             e->type = tt;
+            return e->type;
+        }
+        case EXPR_MEMBER: {
+            Type *ot = check_expr(tc, e->member.object);
+            e->type = struct_field_type(tc, ot, e->member.member, e->loc);
+            return e->type;
+        }
+        case EXPR_INDEX: {
+            Type *at = check_expr(tc, e->index.array);
+            check_expr(tc, e->index.index);
+            if (at->kind == TYPE_PTR) {
+                e->type = at->base;
+            } else if (at->kind == TYPE_STRING) {
+                e->type = type_new(tc->arena, TYPE_CHAR);
+            } else {
+                diag_error(tc->diag, e->loc, "GHL213", "cannot index non-pointer/array type");
+                e->type = type_error(tc);
+            }
             return e->type;
         }
         default:
@@ -261,6 +318,14 @@ static void check_stmt(TypeChecker *tc, Stmt *s) {
             check_expr(tc, s->while_stmt.cond);
             check_stmt(tc, s->while_stmt.body);
             break;
+        case STMT_FOR:
+            push_scope(tc);
+            if (s->for_stmt.init) check_stmt(tc, s->for_stmt.init);
+            if (s->for_stmt.cond) check_expr(tc, s->for_stmt.cond);
+            if (s->for_stmt.step) check_expr(tc, s->for_stmt.step);
+            check_stmt(tc, s->for_stmt.body);
+            pop_scope(tc);
+            break;
         case STMT_BLOCK:
             push_scope(tc);
             for (int i = 0; i < s->block.count; i++)
@@ -294,6 +359,8 @@ void typecheck_program(Program *prog, DiagnosticEngine *diag) {
     tc.arena = prog->arena;
     tc.scope = NULL;
     tc.builtins = NULL;
+    tc.structs = prog->structs;
+    tc.struct_count = prog->struct_count;
 
     push_scope(&tc);
     /* register all functions first */

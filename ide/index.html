@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GHL Studio</title>
+<style>
+  :root {
+    --bg: #1e1e1e;
+    --bg2: #252526;
+    --bg3: #2d2d2d;
+    --border: #3c3c3c;
+    --text: #d4d4d4;
+    --muted: #858585;
+    --accent: #007acc;
+    --accent2: #0e639c;
+    --error: #f14c4c;
+    --warn: #cca700;
+    --kw: #569cd6;
+    --type: #4ec9b0;
+    --str: #ce9178;
+    --num: #b5cea8;
+    --cmt: #6a9955;
+    --fn: #dcdcaa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--text); overflow: hidden; }
+  #app { display: grid; grid-template-rows: 36px 1fr 28px; height: 100vh; }
+  /* Title bar */
+  .titlebar {
+    background: #323233; display: flex; align-items: center; padding: 0 12px; gap: 12px;
+    border-bottom: 1px solid var(--border); user-select: none;
+  }
+  .titlebar .logo { font-weight: 600; font-size: 13px; letter-spacing: 0.3px; }
+  .titlebar .logo span { color: var(--accent); }
+  .titlebar .actions { margin-left: auto; display: flex; gap: 6px; }
+  .btn {
+    background: var(--accent2); color: #fff; border: none; padding: 4px 12px;
+    border-radius: 3px; font-size: 12px; cursor: pointer;
+  }
+  .btn:hover { background: var(--accent); }
+  .btn.secondary { background: var(--bg3); color: var(--text); }
+  .btn.secondary:hover { background: #3e3e42; }
+  /* Main */
+  .main {
+    display: grid; grid-template-columns: 220px 1fr 260px;
+    grid-template-rows: 1fr 180px; min-height: 0;
+  }
+  .sidebar {
+    background: var(--bg2); border-right: 1px solid var(--border);
+    grid-row: 1 / 3; overflow: auto; font-size: 13px;
+  }
+  .sidebar h3 {
+    font-size: 11px; text-transform: uppercase; color: var(--muted);
+    padding: 10px 12px 6px; letter-spacing: 0.5px;
+  }
+  .tree { list-style: none; padding: 0 4px; }
+  .tree li {
+    padding: 4px 10px; cursor: pointer; border-radius: 3px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .tree li:hover { background: #2a2d2e; }
+  .tree li.active { background: #37373d; }
+  .tree .icon { opacity: 0.8; font-size: 12px; }
+  .editor-wrap {
+    display: flex; flex-direction: column; min-width: 0; min-height: 0;
+    border-right: 1px solid var(--border);
+  }
+  .tabs {
+    display: flex; background: var(--bg2); border-bottom: 1px solid var(--border);
+    min-height: 32px; align-items: stretch;
+  }
+  .tab {
+    padding: 6px 14px; font-size: 13px; cursor: pointer; border-right: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px; color: var(--muted);
+  }
+  .tab.active { background: var(--bg); color: var(--text); }
+  .editor-area {
+    flex: 1; display: grid; grid-template-columns: 48px 1fr; min-height: 0;
+    font-family: "Cascadia Code", "Fira Code", "Consolas", monospace; font-size: 14px; line-height: 1.5;
+  }
+  .gutter {
+    background: var(--bg); color: var(--muted); text-align: right; padding: 12px 8px;
+    user-select: none; overflow: hidden; border-right: 1px solid var(--border);
+  }
+  .gutter div { height: 21px; }
+  #code {
+    background: var(--bg); color: var(--text); border: none; outline: none; resize: none;
+    padding: 12px; overflow: auto; white-space: pre; tab-size: 4;
+    font-family: inherit; font-size: inherit; line-height: inherit;
+  }
+  .problems {
+    background: var(--bg2); border-left: 1px solid var(--border);
+    grid-row: 1 / 2; overflow: auto; font-size: 12px;
+  }
+  .problems h3 {
+    font-size: 11px; text-transform: uppercase; color: var(--muted);
+    padding: 10px 12px 6px; border-bottom: 1px solid var(--border);
+  }
+  .prob {
+    padding: 8px 12px; border-bottom: 1px solid var(--border); cursor: pointer;
+  }
+  .prob:hover { background: #2a2d2e; }
+  .prob .sev-error { color: var(--error); }
+  .prob .sev-ok { color: #4ec9b0; }
+  .terminal {
+    grid-column: 2 / 4; background: #0c0c0c; border-top: 1px solid var(--border);
+    display: flex; flex-direction: column; min-height: 0;
+  }
+  .terminal .bar {
+    background: var(--bg2); padding: 4px 10px; font-size: 11px; color: var(--muted);
+    border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.4px;
+  }
+  #term {
+    flex: 1; padding: 8px 12px; font-family: Consolas, monospace; font-size: 12px;
+    overflow: auto; white-space: pre-wrap; color: #cccccc;
+  }
+  .statusbar {
+    background: var(--accent); color: #fff; display: flex; align-items: center;
+    padding: 0 12px; font-size: 12px; gap: 16px;
+  }
+  .statusbar .right { margin-left: auto; }
+  /* Highlight preview layer - we use textarea + simple coloring via overlay is hard;
+     instead apply token classes when rendering read-only preview. For editing we keep textarea. */
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="titlebar">
+    <div class="logo"><span>GHL</span> Studio</div>
+    <div class="actions">
+      <button class="btn secondary" onclick="newFile()">New</button>
+      <button class="btn secondary" onclick="loadExample('hello')">Hello</button>
+      <button class="btn secondary" onclick="loadExample('struct')">Struct</button>
+      <button class="btn" onclick="runCheck()">Check</button>
+      <button class="btn" onclick="runBuild()">Build</button>
+    </div>
+  </div>
+  <div class="main">
+    <aside class="sidebar">
+      <h3>Explorer</h3>
+      <ul class="tree" id="tree">
+        <li class="active" data-file="main.ghl" onclick="selectFile(this)"><span class="icon">📄</span> main.ghl</li>
+        <li data-file="math.ghl" onclick="selectFile(this)"><span class="icon">📄</span> math.ghl</li>
+        <li data-file="ghl.toml" onclick="selectFile(this)"><span class="icon">⚙️</span> ghl.toml</li>
+      </ul>
+      <h3 style="margin-top:16px">Project</h3>
+      <ul class="tree">
+        <li><span class="icon">📁</span> src/</li>
+        <li><span class="icon">📁</span> std/</li>
+        <li><span class="icon">📁</span> bin/</li>
+      </ul>
+    </aside>
+    <div class="editor-wrap">
+      <div class="tabs">
+        <div class="tab active" id="tab-name">main.ghl</div>
+      </div>
+      <div class="editor-area">
+        <div class="gutter" id="gutter"></div>
+        <textarea id="code" spellcheck="false" oninput="onEdit()" onscroll="syncScroll()"></textarea>
+      </div>
+    </div>
+    <aside class="problems">
+      <h3>Problems</h3>
+      <div id="problems"><div class="prob"><span class="sev-ok">No problems</span></div></div>
+    </aside>
+    <div class="terminal">
+      <div class="bar">Terminal</div>
+      <div id="term">> ghlc — GaphopLang Studio local mode
+> Use Build / Check. On your machine run: ghlc build
+</div>
+    </div>
+  </div>
+  <div class="statusbar">
+    <span id="status-file">main.ghl</span>
+    <span>GaphopLang</span>
+    <span class="right" id="status-pos">Ln 1, Col 1</span>
+  </div>
+</div>
+<script>
+const files = {
+  "main.ghl": `fn main() -> int {
+    println("Hello from GHL Studio!");
+    return 0;
+}
+`,
+  "math.ghl": `import math;
+
+fn main() -> int {
+    int a = abs_int(0 - 42);
+    print_int(a);
+    println("");
+    return 0;
+}
+`,
+  "ghl.toml": `name = "StudioDemo"
+version = "0.1.0"
+entry = "src/main.ghl"
+output = "bin/StudioDemo"
+`
+};
+
+let current = "main.ghl";
+const code = document.getElementById("code");
+const gutter = document.getElementById("gutter");
+const term = document.getElementById("term");
+const problems = document.getElementById("problems");
+
+function setCode(text) {
+  code.value = text;
+  updateGutter();
+}
+
+function updateGutter() {
+  const lines = code.value.split("\\n").length;
+  let html = "";
+  for (let i = 1; i <= Math.max(lines, 20); i++) html += "<div>" + i + "</div>";
+  gutter.innerHTML = html;
+}
+
+function syncScroll() {
+  gutter.scrollTop = code.scrollTop;
+}
+
+function onEdit() {
+  updateGutter();
+  files[current] = code.value;
+  const pos = code.selectionStart;
+  const lines = code.value.slice(0, pos).split("\\n");
+  document.getElementById("status-pos").textContent = "Ln " + lines.length + ", Col " + (lines[lines.length-1].length + 1);
+}
+
+function selectFile(el) {
+  document.querySelectorAll(".tree li").forEach(x => x.classList.remove("active"));
+  el.classList.add("active");
+  current = el.dataset.file;
+  document.getElementById("tab-name").textContent = current;
+  document.getElementById("status-file").textContent = current;
+  setCode(files[current] || "");
+}
+
+function newFile() {
+  current = "untitled.ghl";
+  files[current] = "fn main() -> int {\\n    return 0;\\n}\\n";
+  setCode(files[current]);
+  document.getElementById("tab-name").textContent = current;
+  termAppend("> New file created");
+}
+
+function loadExample(name) {
+  if (name === "hello") {
+    current = "main.ghl";
+    files[current] = `fn main() -> int {
+    println("Hello, GaphopLang!");
+    return 0;
+}
+`;
+  } else {
+    current = "main.ghl";
+    files[current] = `struct Player {
+    int health;
+    float speed;
+};
+
+fn main() -> int {
+    Player p;
+    p.health = 100;
+    print_int(p.health);
+    println("");
+    for (int i = 0; i < 3; i = i + 1) {
+        print_int(i);
+    }
+    println("");
+    return 0;
+}
+`;
+  }
+  setCode(files[current]);
+  document.getElementById("tab-name").textContent = current;
+  termAppend("> Loaded example: " + name);
+}
+
+function termAppend(s) {
+  term.textContent += s + "\\n";
+  term.scrollTop = term.scrollHeight;
+}
+
+function simpleCheck(src) {
+  const errs = [];
+  if (!/fn\\s+main\\s*\\(/.test(src)) errs.push({sev:"error", msg:"missing fn main()", line:1});
+  const open = (src.match(/{/g)||[]).length;
+  const close = (src.match(/}/g)||[]).length;
+  if (open !== close) errs.push({sev:"error", msg:"unbalanced braces { }", line:1});
+  // undefined-looking idents is too noisy without lexer
+  return errs;
+}
+
+function runCheck() {
+  termAppend("> ghlc check " + current);
+  const errs = simpleCheck(code.value);
+  if (errs.length === 0) {
+    problems.innerHTML = '<div class="prob"><span class="sev-ok">No problems — syntax looks OK (client-side)</span></div>';
+    termAppend("Check succeeded (client-side). For full typecheck run ghlc check on your machine.");
+  } else {
+    problems.innerHTML = errs.map(e =>
+      `<div class="prob"><span class="sev-error">error</span> ${e.msg}</div>`
+    ).join("");
+    termAppend("Check found " + errs.length + " issue(s).");
+  }
+}
+
+function runBuild() {
+  termAppend("> ghlc build " + current);
+  termAppend("[1/5] Lexing");
+  termAppend("[2/5] Parsing");
+  termAppend("[3/5] Type checking");
+  const errs = simpleCheck(code.value);
+  if (errs.length) {
+    problems.innerHTML = errs.map(e =>
+      `<div class="prob"><span class="sev-error">error</span> ${e.msg}</div>`
+    ).join("");
+    termAppend("Build failed with " + errs.length + " error(s).");
+    return;
+  }
+  termAppend("[4/5] Code generation");
+  termAppend("[5/5] Linking");
+  termAppend("");
+  termAppend("Build succeeded (simulated in Studio).");
+  termAppend("On MSYS2 / Linux run:");
+  termAppend("  ghlc build " + current + " -o bin/app");
+  problems.innerHTML = '<div class="prob"><span class="sev-ok">Build OK (client simulation)</span></div>';
+}
+
+code.addEventListener("keydown", (e) => {
+  if (e.key === "Tab") {
+    e.preventDefault();
+    const s = code.selectionStart, end = code.selectionEnd;
+    code.value = code.value.slice(0, s) + "    " + code.value.slice(end);
+    code.selectionStart = code.selectionEnd = s + 4;
+    onEdit();
+  }
+});
+
+setCode(files[current]);
+code.addEventListener("click", onEdit);
+code.addEventListener("keyup", onEdit);
+</script>
+</body>
+</html>

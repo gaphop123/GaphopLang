@@ -1,0 +1,3 @@
+fn times2(int x) -> int {
+    return x * 2;
+}

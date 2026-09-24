@@ -1,0 +1,24 @@
+// GHL Standard Library — math
+// Built-in runtime functions (linked via C math.h by the compiler):
+//   sqrt, sin, cos, tan, pow, abs, floor, ceil
+
+fn abs_int(int x) -> int {
+    if (x < 0) {
+        return 0 - x;
+    }
+    return x;
+}
+
+fn min_int(int a, int b) -> int {
+    if (a < b) {
+        return a;
+    }
+    return b;
+}
+
+fn max_int(int a, int b) -> int {
+    if (a > b) {
+        return a;
+    }
+    return b;
+}

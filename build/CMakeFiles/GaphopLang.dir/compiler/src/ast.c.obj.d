@@ -1,7 +1,7 @@
 CMakeFiles/GaphopLang.dir/compiler/src/ast.c.obj: \
- C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\ast.c \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/ast.h \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/common.h \
+ C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\ast.c \
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/ast.h \
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/common.h \
  C:/msys64/ucrt64/include/stdio.h \
  C:/msys64/ucrt64/include/corecrt_stdio_config.h \
  C:/msys64/ucrt64/include/corecrt.h C:/msys64/ucrt64/include/_mingw.h \
@@ -31,4 +31,4 @@ CMakeFiles/GaphopLang.dir/compiler/src/ast.c.obj: \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/diagnostics.h
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/diagnostics.h

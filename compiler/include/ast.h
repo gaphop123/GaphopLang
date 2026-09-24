@@ -157,6 +157,19 @@ typedef struct Param {
     SourceLoc loc;
 } Param;
 
+typedef struct StructField {
+    Type *type;
+    char *name;
+    SourceLoc loc;
+} StructField;
+
+typedef struct StructDef {
+    char *name;
+    StructField *fields;
+    int field_count;
+    SourceLoc loc;
+} StructDef;
+
 typedef struct Function {
     char *name;
     Type *ret_type;
@@ -166,9 +179,18 @@ typedef struct Function {
     SourceLoc loc;
 } Function;
 
+typedef struct ImportDecl {
+    char *path;          /* "math" or "./utils.ghl" */
+    SourceLoc loc;
+} ImportDecl;
+
 typedef struct Program {
     Function **funcs;
     int func_count;
+    StructDef **structs;
+    int struct_count;
+    ImportDecl **imports;
+    int import_count;
     Arena *arena;
 } Program;
 
@@ -181,7 +203,6 @@ Expr *expr_int(Arena *a, SourceLoc loc, int64_t v);
 Expr *expr_float(Arena *a, SourceLoc loc, double v);
 Expr *expr_string(Arena *a, SourceLoc loc, char *s);
 Expr *expr_bool(Arena *a, SourceLoc loc, bool v);
-Expr *expr_char(Arena *a, SourceLoc loc, char v);
 Expr *expr_char(Arena *a, SourceLoc loc, char v);
 Expr *expr_null(Arena *a, SourceLoc loc);
 Expr *expr_ident(Arena *a, SourceLoc loc, char *name);
@@ -200,6 +221,10 @@ Stmt *stmt_break(Arena *a, SourceLoc loc);
 Stmt *stmt_continue(Arena *a, SourceLoc loc);
 
 Function *func_new(Arena *a, SourceLoc loc, char *name, Type *ret, Param *params, int n, Stmt *body);
+StructDef *struct_new(Arena *a, SourceLoc loc, char *name, StructField *fields, int n);
+Expr *expr_member(Arena *a, SourceLoc loc, Expr *object, char *member);
+Expr *expr_index(Arena *a, SourceLoc loc, Expr *array, Expr *index);
+Stmt *stmt_for(Arena *a, SourceLoc loc, Stmt *init, Expr *cond, Expr *step, Stmt *body);
 Program *program_new(Arena *a);
 
 #endif

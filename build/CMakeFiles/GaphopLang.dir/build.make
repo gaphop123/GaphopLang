@@ -52,10 +52,10 @@ RM = C:\msys64\ucrt64\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang
+CMAKE_SOURCE_DIR = C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\build
+CMAKE_BINARY_DIR = C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\build
 
 # Include any dependencies generated for this target.
 include CMakeFiles/GaphopLang.dir/depend.make
@@ -73,123 +73,123 @@ CMakeFiles/GaphopLang.dir/codegen:
 
 CMakeFiles/GaphopLang.dir/compiler/src/main.c.obj: CMakeFiles/GaphopLang.dir/flags.make
 CMakeFiles/GaphopLang.dir/compiler/src/main.c.obj: CMakeFiles/GaphopLang.dir/includes_C.rsp
-CMakeFiles/GaphopLang.dir/compiler/src/main.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/src/main.c
+CMakeFiles/GaphopLang.dir/compiler/src/main.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/src/main.c
 CMakeFiles/GaphopLang.dir/compiler/src/main.c.obj: CMakeFiles/GaphopLang.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/main.c.obj"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/main.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\main.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\main.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\main.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/main.c.obj"
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/main.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\main.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\main.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\main.c
 
 CMakeFiles/GaphopLang.dir/compiler/src/main.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/GaphopLang.dir/compiler/src/main.c.i"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\main.c > CMakeFiles\GaphopLang.dir\compiler\src\main.c.i
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\main.c > CMakeFiles\GaphopLang.dir\compiler\src\main.c.i
 
 CMakeFiles/GaphopLang.dir/compiler/src/main.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/GaphopLang.dir/compiler/src/main.c.s"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\main.c -o CMakeFiles\GaphopLang.dir\compiler\src\main.c.s
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\main.c -o CMakeFiles\GaphopLang.dir\compiler\src\main.c.s
 
 CMakeFiles/GaphopLang.dir/compiler/src/ast.c.obj: CMakeFiles/GaphopLang.dir/flags.make
 CMakeFiles/GaphopLang.dir/compiler/src/ast.c.obj: CMakeFiles/GaphopLang.dir/includes_C.rsp
-CMakeFiles/GaphopLang.dir/compiler/src/ast.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/src/ast.c
+CMakeFiles/GaphopLang.dir/compiler/src/ast.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/src/ast.c
 CMakeFiles/GaphopLang.dir/compiler/src/ast.c.obj: CMakeFiles/GaphopLang.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/ast.c.obj"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/ast.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\ast.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\ast.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\ast.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/ast.c.obj"
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/ast.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\ast.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\ast.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\ast.c
 
 CMakeFiles/GaphopLang.dir/compiler/src/ast.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/GaphopLang.dir/compiler/src/ast.c.i"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\ast.c > CMakeFiles\GaphopLang.dir\compiler\src\ast.c.i
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\ast.c > CMakeFiles\GaphopLang.dir\compiler\src\ast.c.i
 
 CMakeFiles/GaphopLang.dir/compiler/src/ast.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/GaphopLang.dir/compiler/src/ast.c.s"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\ast.c -o CMakeFiles\GaphopLang.dir\compiler\src\ast.c.s
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\ast.c -o CMakeFiles\GaphopLang.dir\compiler\src\ast.c.s
 
 CMakeFiles/GaphopLang.dir/compiler/src/codegen.c.obj: CMakeFiles/GaphopLang.dir/flags.make
 CMakeFiles/GaphopLang.dir/compiler/src/codegen.c.obj: CMakeFiles/GaphopLang.dir/includes_C.rsp
-CMakeFiles/GaphopLang.dir/compiler/src/codegen.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/src/codegen.c
+CMakeFiles/GaphopLang.dir/compiler/src/codegen.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/src/codegen.c
 CMakeFiles/GaphopLang.dir/compiler/src/codegen.c.obj: CMakeFiles/GaphopLang.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/codegen.c.obj"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/codegen.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\codegen.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\codegen.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\codegen.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/codegen.c.obj"
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/codegen.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\codegen.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\codegen.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\codegen.c
 
 CMakeFiles/GaphopLang.dir/compiler/src/codegen.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/GaphopLang.dir/compiler/src/codegen.c.i"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\codegen.c > CMakeFiles\GaphopLang.dir\compiler\src\codegen.c.i
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\codegen.c > CMakeFiles\GaphopLang.dir\compiler\src\codegen.c.i
 
 CMakeFiles/GaphopLang.dir/compiler/src/codegen.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/GaphopLang.dir/compiler/src/codegen.c.s"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\codegen.c -o CMakeFiles\GaphopLang.dir\compiler\src\codegen.c.s
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\codegen.c -o CMakeFiles\GaphopLang.dir\compiler\src\codegen.c.s
 
 CMakeFiles/GaphopLang.dir/compiler/src/common.c.obj: CMakeFiles/GaphopLang.dir/flags.make
 CMakeFiles/GaphopLang.dir/compiler/src/common.c.obj: CMakeFiles/GaphopLang.dir/includes_C.rsp
-CMakeFiles/GaphopLang.dir/compiler/src/common.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/src/common.c
+CMakeFiles/GaphopLang.dir/compiler/src/common.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/src/common.c
 CMakeFiles/GaphopLang.dir/compiler/src/common.c.obj: CMakeFiles/GaphopLang.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/common.c.obj"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/common.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\common.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\common.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\common.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/common.c.obj"
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/common.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\common.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\common.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\common.c
 
 CMakeFiles/GaphopLang.dir/compiler/src/common.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/GaphopLang.dir/compiler/src/common.c.i"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\common.c > CMakeFiles\GaphopLang.dir\compiler\src\common.c.i
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\common.c > CMakeFiles\GaphopLang.dir\compiler\src\common.c.i
 
 CMakeFiles/GaphopLang.dir/compiler/src/common.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/GaphopLang.dir/compiler/src/common.c.s"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\common.c -o CMakeFiles\GaphopLang.dir\compiler\src\common.c.s
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\common.c -o CMakeFiles\GaphopLang.dir\compiler\src\common.c.s
 
 CMakeFiles/GaphopLang.dir/compiler/src/diagnostics.c.obj: CMakeFiles/GaphopLang.dir/flags.make
 CMakeFiles/GaphopLang.dir/compiler/src/diagnostics.c.obj: CMakeFiles/GaphopLang.dir/includes_C.rsp
-CMakeFiles/GaphopLang.dir/compiler/src/diagnostics.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/src/diagnostics.c
+CMakeFiles/GaphopLang.dir/compiler/src/diagnostics.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/src/diagnostics.c
 CMakeFiles/GaphopLang.dir/compiler/src/diagnostics.c.obj: CMakeFiles/GaphopLang.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/diagnostics.c.obj"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/diagnostics.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\diagnostics.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\diagnostics.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\diagnostics.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/diagnostics.c.obj"
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/diagnostics.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\diagnostics.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\diagnostics.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\diagnostics.c
 
 CMakeFiles/GaphopLang.dir/compiler/src/diagnostics.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/GaphopLang.dir/compiler/src/diagnostics.c.i"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\diagnostics.c > CMakeFiles\GaphopLang.dir\compiler\src\diagnostics.c.i
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\diagnostics.c > CMakeFiles\GaphopLang.dir\compiler\src\diagnostics.c.i
 
 CMakeFiles/GaphopLang.dir/compiler/src/diagnostics.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/GaphopLang.dir/compiler/src/diagnostics.c.s"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\diagnostics.c -o CMakeFiles\GaphopLang.dir\compiler\src\diagnostics.c.s
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\diagnostics.c -o CMakeFiles\GaphopLang.dir\compiler\src\diagnostics.c.s
 
 CMakeFiles/GaphopLang.dir/compiler/src/lexer.c.obj: CMakeFiles/GaphopLang.dir/flags.make
 CMakeFiles/GaphopLang.dir/compiler/src/lexer.c.obj: CMakeFiles/GaphopLang.dir/includes_C.rsp
-CMakeFiles/GaphopLang.dir/compiler/src/lexer.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/src/lexer.c
+CMakeFiles/GaphopLang.dir/compiler/src/lexer.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/src/lexer.c
 CMakeFiles/GaphopLang.dir/compiler/src/lexer.c.obj: CMakeFiles/GaphopLang.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/lexer.c.obj"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/lexer.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\lexer.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\lexer.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\lexer.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/lexer.c.obj"
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/lexer.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\lexer.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\lexer.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\lexer.c
 
 CMakeFiles/GaphopLang.dir/compiler/src/lexer.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/GaphopLang.dir/compiler/src/lexer.c.i"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\lexer.c > CMakeFiles\GaphopLang.dir\compiler\src\lexer.c.i
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\lexer.c > CMakeFiles\GaphopLang.dir\compiler\src\lexer.c.i
 
 CMakeFiles/GaphopLang.dir/compiler/src/lexer.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/GaphopLang.dir/compiler/src/lexer.c.s"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\lexer.c -o CMakeFiles\GaphopLang.dir\compiler\src\lexer.c.s
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\lexer.c -o CMakeFiles\GaphopLang.dir\compiler\src\lexer.c.s
 
 CMakeFiles/GaphopLang.dir/compiler/src/parser.c.obj: CMakeFiles/GaphopLang.dir/flags.make
 CMakeFiles/GaphopLang.dir/compiler/src/parser.c.obj: CMakeFiles/GaphopLang.dir/includes_C.rsp
-CMakeFiles/GaphopLang.dir/compiler/src/parser.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/src/parser.c
+CMakeFiles/GaphopLang.dir/compiler/src/parser.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/src/parser.c
 CMakeFiles/GaphopLang.dir/compiler/src/parser.c.obj: CMakeFiles/GaphopLang.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/parser.c.obj"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/parser.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\parser.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\parser.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\parser.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/parser.c.obj"
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/parser.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\parser.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\parser.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\parser.c
 
 CMakeFiles/GaphopLang.dir/compiler/src/parser.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/GaphopLang.dir/compiler/src/parser.c.i"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\parser.c > CMakeFiles\GaphopLang.dir\compiler\src\parser.c.i
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\parser.c > CMakeFiles\GaphopLang.dir\compiler\src\parser.c.i
 
 CMakeFiles/GaphopLang.dir/compiler/src/parser.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/GaphopLang.dir/compiler/src/parser.c.s"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\parser.c -o CMakeFiles\GaphopLang.dir\compiler\src\parser.c.s
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\parser.c -o CMakeFiles\GaphopLang.dir\compiler\src\parser.c.s
 
 CMakeFiles/GaphopLang.dir/compiler/src/typecheck.c.obj: CMakeFiles/GaphopLang.dir/flags.make
 CMakeFiles/GaphopLang.dir/compiler/src/typecheck.c.obj: CMakeFiles/GaphopLang.dir/includes_C.rsp
-CMakeFiles/GaphopLang.dir/compiler/src/typecheck.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/src/typecheck.c
+CMakeFiles/GaphopLang.dir/compiler/src/typecheck.c.obj: C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/src/typecheck.c
 CMakeFiles/GaphopLang.dir/compiler/src/typecheck.c.obj: CMakeFiles/GaphopLang.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/typecheck.c.obj"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/typecheck.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\typecheck.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\typecheck.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\typecheck.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building C object CMakeFiles/GaphopLang.dir/compiler/src/typecheck.c.obj"
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/GaphopLang.dir/compiler/src/typecheck.c.obj -MF CMakeFiles\GaphopLang.dir\compiler\src\typecheck.c.obj.d -o CMakeFiles\GaphopLang.dir\compiler\src\typecheck.c.obj -c C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\typecheck.c
 
 CMakeFiles/GaphopLang.dir/compiler/src/typecheck.c.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/GaphopLang.dir/compiler/src/typecheck.c.i"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\typecheck.c > CMakeFiles\GaphopLang.dir\compiler\src\typecheck.c.i
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\typecheck.c > CMakeFiles\GaphopLang.dir\compiler\src\typecheck.c.i
 
 CMakeFiles/GaphopLang.dir/compiler/src/typecheck.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/GaphopLang.dir/compiler/src/typecheck.c.s"
-	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\typecheck.c -o CMakeFiles\GaphopLang.dir\compiler\src\typecheck.c.s
+	C:\msys64\ucrt64\bin\cc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\typecheck.c -o CMakeFiles\GaphopLang.dir\compiler\src\typecheck.c.s
 
 # Object files for target GaphopLang
 GaphopLang_OBJECTS = \
@@ -217,7 +217,7 @@ GaphopLang.exe: CMakeFiles/GaphopLang.dir/build.make
 GaphopLang.exe: CMakeFiles/GaphopLang.dir/linkLibs.rsp
 GaphopLang.exe: CMakeFiles/GaphopLang.dir/objects1.rsp
 GaphopLang.exe: CMakeFiles/GaphopLang.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking C executable GaphopLang.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking C executable GaphopLang.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\GaphopLang.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -229,6 +229,6 @@ CMakeFiles/GaphopLang.dir/clean:
 .PHONY : CMakeFiles/GaphopLang.dir/clean
 
 CMakeFiles/GaphopLang.dir/depend:
-	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\build C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\build C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\build\CMakeFiles\GaphopLang.dir\DependInfo.cmake "--color=$(COLOR)" GaphopLang
+	$(CMAKE_COMMAND) -E cmake_depends "MinGW Makefiles" C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\build C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\build C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\build\CMakeFiles\GaphopLang.dir\DependInfo.cmake "--color=$(COLOR)" GaphopLang
 .PHONY : CMakeFiles/GaphopLang.dir/depend
 

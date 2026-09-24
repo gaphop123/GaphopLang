@@ -7,7 +7,7 @@ set(CMAKE_DEPENDS_GENERATOR "MinGW Makefiles")
 # The top level Makefile was generated from the following files:
 set(CMAKE_MAKEFILE_DEPENDS
   "CMakeCache.txt"
-  "C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/CMakeLists.txt"
+  "C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/CMakeLists.txt"
   "CMakeFiles/4.4.3/CMakeCCompiler.cmake"
   "CMakeFiles/4.4.3/CMakeRCCompiler.cmake"
   "CMakeFiles/4.4.3/CMakeSystem.cmake"

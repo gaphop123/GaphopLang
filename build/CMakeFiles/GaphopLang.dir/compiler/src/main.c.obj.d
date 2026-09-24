@@ -1,6 +1,6 @@
 CMakeFiles/GaphopLang.dir/compiler/src/main.c.obj: \
- C:\Users\Admin\Downloads\GaphopLang-0.1.0\GaphopLang\compiler\src\main.c \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/common.h \
+ C:\Users\Admin\Downloads\GaphopLang-0.1.0-msys2\GaphopLang\compiler\src\main.c \
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/common.h \
  C:/msys64/ucrt64/include/stdio.h \
  C:/msys64/ucrt64/include/corecrt_stdio_config.h \
  C:/msys64/ucrt64/include/corecrt.h C:/msys64/ucrt64/include/_mingw.h \
@@ -30,20 +30,17 @@ CMakeFiles/GaphopLang.dir/compiler/src/main.c.obj: \
  C:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/16.2.0/include/stdarg.h \
  C:/msys64/ucrt64/include/stdarg.h \
  C:/msys64/ucrt64/include/_mingw_stdarg.h \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/diagnostics.h \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/common.h \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/lexer.h \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/diagnostics.h \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/parser.h \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/lexer.h \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/ast.h \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/ast.h \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/typecheck.h \
- C:/Users/Admin/Downloads/GaphopLang-0.1.0/GaphopLang/compiler/include/codegen.h \
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/diagnostics.h \
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/common.h \
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/lexer.h \
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/diagnostics.h \
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/parser.h \
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/lexer.h \
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/ast.h \
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/ast.h \
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/typecheck.h \
+ C:/Users/Admin/Downloads/GaphopLang-0.1.0-msys2/GaphopLang/compiler/include/codegen.h \
  C:/msys64/ucrt64/include/sys/stat.h C:/msys64/ucrt64/include/io.h \
  C:/msys64/ucrt64/include/sys/types.h \
  C:/msys64/ucrt64/include/_mingw_stat64.h \
- C:/msys64/ucrt64/include/unistd.h C:/msys64/ucrt64/include/process.h \
- C:/msys64/ucrt64/include/corecrt_startup.h \
- C:/msys64/ucrt64/include/getopt.h \
- C:/msys64/ucrt64/include/pthread_unistd.h
+ C:/msys64/ucrt64/include/direct.h

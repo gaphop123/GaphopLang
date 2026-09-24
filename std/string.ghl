@@ -1,0 +1,3 @@
+// GHL Standard Library — string
+// Runtime bindings: strlen, strcmp (via C)
+// Pure GHL helpers can be added here as the language grows.
